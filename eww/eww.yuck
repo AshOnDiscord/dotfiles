@@ -1,0 +1,236 @@
+(defwindow example
+  :monitor 0
+  :geometry (geometry :x "0%"
+    :y "24px"
+    :width "1872px"
+    :height "48px"
+  :anchor "top center")
+  :stacking "bg"
+  :reserve (struts :distance "79px" :side "top")
+  :windowtype "dock"
+  :wm-ignore false
+  :vexpand false
+  :hexpand true
+  
+  (centerbox
+    :class "bar"
+    (box
+      :space-evenly false
+      :halign "start"
+      :class "left"
+      (box
+        :space-evenly false
+        :visible workspaces-visible
+        :class "workspaces"
+        (literal :content workspaces)
+      )
+      (label
+        :class "divider"
+        :text "|") 
+      (box
+        :space-evenly false
+        :visible windows-visible
+        :class "windows"
+        (literal :content windows)
+      )
+    )
+    (box
+      :halign "center"
+      :class "center"
+      ; "AshOnDiscord"
+    )
+    (box
+      :halign "end"
+      :class "right"
+      :space-evenly false
+      (wifi)
+      (volume)
+      (brightness)
+      (battery)
+      (time)
+    )
+  )
+)
+
+(defvar mouseY "10px")
+
+(defvar workspaces-visible true)
+(deflisten workspaces "./modules/workspaces.sh")
+
+
+(defvar windows-visible true)
+(deflisten windows "./modules/windows.sh")
+
+; Wifi
+
+(defwidget wifi []
+  (box :class "wifi"
+    :space-evenly false
+    :visible internet-visible
+    (box
+      :visible network-visible
+      :class "network"
+      :space-evenly false
+      (label :class "icon-label" :text "󰖩")
+      network
+    )
+    (box
+      :visible ipv4-visible
+      :class "ipv4"
+      :space-evenly false
+      (label :class "icon-label" :text "󰖩")
+      ipv4
+    )
+  )
+)
+
+(defvar internet-visible true)
+
+(defpoll network :interval "1m"
+:initial "Not Connected" `iwctl station wlan0 show | grep "Connected network" | awk '{print $3}'`)
+(defvar network-visible true)
+
+(defpoll ipv4 :interval "1m"
+:initial "Not Connected" `iwctl station wlan0 show | grep "IPv4 address" | awk '{print $3}'`)
+(defvar ipv4-visible false)
+
+; Volume
+
+(defwidget volume []
+  (eventbox
+    :onhover "eww update volume-hover=true"
+    :onhoverlost "eww update volume-hover=false"
+    :class "volume"
+    :visible volume-visible
+    (box :class "volume-label bar-widget bar-scale-widget"
+      :space-evenly false
+      (revealer :transition "slideleft"
+        :reveal volume-hover
+        :duration "500ms"
+        (scale :class "volume-slider"
+          :value volume :min "0" :max "101" :step "1"
+          :onchange "pactl set-sink-volume @DEFAULT_SINK@ {}%"
+          :orientation "horizontal"
+        )
+      )
+      (box
+        :space-evenly false
+        (label :class "icon-label" :text "󰕾")
+        volume
+        (label :text "%")
+      )
+    )
+  )
+)
+
+(deflisten volume `./modules/volume.sh`)
+(defvar volume-visible true)
+(defvar volume-hover false)
+
+; Brightness
+
+(defwidget brightness []
+  (eventbox
+    :onhover "eww update brightness-hover=true"
+    :onhoverlost "eww update brightness-hover=false"
+    :visible brightness-visible
+    :class "brightness"
+    (box :class "brightness-label bar-widget bar-scale-widget"
+      :space-evenly false
+      (revealer :transition "slideleft"
+        :reveal brightness-hover
+        :duration "500ms"
+        (scale :class "brightness-slider"
+          :value brightness :min "0" :max "101" :step "1"
+          :onchange "brightnessctl s {}%; ./modules/brightness2.sh"
+          :orientation "horizontal"
+        )
+      )
+      (box
+        :space-evenly false
+        (label :class "icon-label" :text "󰃠")
+        brightness (label  :text "%")
+      )
+    )
+  )
+)
+
+(deflisten brightness "./modules/brightness.sh")
+(defvar brightness-visible true)
+(defvar brightness-hover false)
+
+; Time
+
+(defwidget time []
+  (button
+    :onclick "./modules/popup.sh calendarPopup true -325 15"
+    (box
+      :visible time-visible
+      :space-evenly false
+      :class "volume bar-widget"
+      timehour
+      (label :class "mauve" :text ":")
+      timemin
+      (label :class "mauve" :text timehalf)
+    )
+  )
+)
+
+
+(defpoll timehour :interval "1s"
+  :initial "12"
+  :run-while time-visible
+`date "+%I"`)
+
+(defpoll timemin :interval "1s"
+  :initial "00"
+  :run-while time-visible
+`date "+%M "`)
+
+(defpoll timehalf :interval "1s"
+  :initial "PM"
+  :run-while time-visible
+`date "+%p"`)
+
+(defvar time-visible true)
+
+; Battery
+
+(defwidget battery[]
+  (box
+    :space-evenly false
+    :class "bar-widget"
+    (label :class "mauve" :style "margin-right: 0.5rem" :text {charging == "1" ? "󰂄" : battery >= 90 ? "󰁹" : battery >= 80 ? "󰂂" : battery >= 70 ? "󰂁" : battery >= 60 ? "󰂀" : battery >= 50 ? "󰁿" : battery >= 40 ? "󰁾" : battery >= 30 ? "󰁽" : battery >= 20 ? "󰁼" : battery >= 10 ? "󰁻" : "󰁺"})
+    battery (label  :text "%") 
+  )
+)
+
+(defvar battery-visible true)
+
+(defpoll
+  battery :interval "1s"
+  :initial "0%"
+  :run-while battery-visible
+`cat /sys/class/power_supply/BAT1/capacity`)
+; "echo 100")
+
+(defpoll
+  charging :interval "1s"
+  :initial "0"
+  :run-while battery-visible
+`cat /sys/class/power_supply/ACAD/online`)
+
+(defwindow calendarPopup
+  :monitor 0
+  :geometry (geometry
+    :width "384px"
+    :height "256px"
+  :anchor "top left")
+  :stacking "fg"
+  :windowtype "dock"
+  :class "calendarPopup"
+  :wm-ignore false
+  (box :class "calendar-wrapper"
+    (calendar)
+  )
+)

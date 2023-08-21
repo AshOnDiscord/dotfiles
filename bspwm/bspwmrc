@@ -24,7 +24,7 @@ bspc rule -a Screenkey manage=off
 feh --bg-fill /home/ash/privateFiles/wallpapers/misc/windows-error.jpg
 # picom &
 # polybar &
-picom --config /home/ash/.config/picom/picomMin.conf &
+picom --config /home/ash/.config/picom/picomMin2.conf &
 eww open example
 bspc desktop -f '^1'
 kitty &

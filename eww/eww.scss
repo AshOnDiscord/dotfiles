@@ -1,33 +1,39 @@
-$rosewater: #f4dbd6;
-$flamingo: #f0c6c6;
-$pink: #f5bde6;
-$mauve: #c6a0f6;
-$red: #ed8796;
-$maroon: #ee99a0;
-$peach: #f5a97f;
-$yellow: #eed49f;
-$green: #a6da95;
-$teal: #8bd5ca;
-$sky: #91d7e3;
-$sapphire: #7dc4e4;
-$blue: #8aadf4;
-$lavender: #b7bdf8;
-$text: #cad3f5;
-$subtext1: #b8c0e0;
-$subtext0: #a5adcb;
-$overlay2: #939ab7;
-$overlay1: #8087a2;
-$overlay0: #6e738d;
-$surface2: #5b6078;
-$surface1: #494d64;
-$surface0: #363a4f;
-$base: #24273a;
-$mantle: #1e2030;
-$crust: #181926;
+@import "/home/ash/.cache/wal/colors.scss";
+
+// $rosewater: #f4dbd6;
+// $flamingo: #f0c6c6;
+// $pink: #f5bde6;
+// $mauve: #c6a0f6;
+// $red: #ed8796;
+// $maroon: #ee99a0;
+// $peach: #f5a97f;
+// $yellow: #eed49f;
+// $green: #a6da95;
+// $teal: #8bd5ca;
+// $sky: #91d7e3;
+// $sapphire: #7dc4e4;
+// $blue: #8aadf4;
+// $lavender: #b7bdf8;
+// $text: #cad3f5;
+// $subtext1: #b8c0e0;
+// $subtext0: #a5adcb;
+// $overlay2: #939ab7;
+// $overlay1: #8087a2;
+// $overlay0: #6e738d;
+// $surface2: #5b6078;
+// $surface1: #494d64;
+// $surface0: #363a4f;
+// $base: #24273a;
+// $mantle: #1e2030;
+// $crust: #181926;
 
 $gap: 24px;
 $round: 0.6rem;
 $height: 48px;
+
+$color0-10: desaturate(lighten($color0, 10%), 10%);
+$color0-20: desaturate(lighten($color0, 20%), 20%);
+$color0-30: desaturate(lighten($color0, 30%), 30%);
 
 * {
   all: unset;
@@ -36,25 +42,25 @@ $height: 48px;
 }
 
 .mauve {
-  color: $mauve;
+  color: $color1;
 }
 
 .icon-label {
   font-size: 2rem;
-  color: $mauve;
+  color: $color1;
   margin-right: 0.5rem;
 }
 
 .bar {
-  background-color: $base;
-  color: $text;
+  background-color: $background;
+  color: $foreground;
   padding: calc(#{$gap} / 4) $gap;
   // border: 2px solid $mauve;
   border-radius: $round;
 }
 
 .left .divider {
-  color: $subtext1;
+  color: $foreground;
 }
 
 .workspaces {
@@ -69,27 +75,28 @@ $height: 48px;
   }
 }
 
+
 .workspaces, .windows {
 
   .focused {
-    color: $mauve;
+    color: $color1;
   }
 
   .empty {
-    color: $overlay0;
+    color: $color0-20;
   }
 }
 
 scale trough {
   all: unset;
-  background-color: $surface0;
+  background-color: $color0-10;
   border-radius: 1rem;
   min-width: 7.5rem;
   min-height: 1rem;
 
   highlight {
     all: unset;
-    background-color: $mauve;
+    background-color: $color1;
     border-radius: 0.5rem;
   }
 }
@@ -109,10 +116,10 @@ scale trough {
 }
 
 .calendarPopup {
-  background-color: $mantle;
-  color: $text;
+  background-color: $background;
+  color: $foreground;
   padding: $gap;
-  border: 2px solid $mauve;
+  border: 2px solid $color1;
   border-radius: $round;
   font-weight: bold;
 
@@ -124,7 +131,7 @@ scale trough {
       margin-left: 0.625rem;
 
       &.button {
-        color: $mauve;
+        color: $color1;
       }
 
       &.highlight {
@@ -133,11 +140,11 @@ scale trough {
 
       &:selected,
       &.highlight {
-        color: $mauve;
+        color: $color1;
       }
 
       &:indeterminate {
-        color: $overlay2;
+        color: $background;
       }
     }
   }

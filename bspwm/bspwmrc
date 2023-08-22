@@ -1,4 +1,4 @@
-#! /bin/sh
+ /bin/sh
 
 pgrep -x sxhkd > /dev/null || sxhkd &
 
@@ -24,12 +24,8 @@ bspc rule -a Screenkey manage=off
 #feh --bg-fill /home/ash/privateFiles/wallpapers/misc/windows-error.jpg
 # picom &
 # polybar &
-<<<<<<< Updated upstream
-picom --config /home/ash/.config/picom/picomMin2.conf &
-=======
 wal --iterative -i /home/ash/Images #insert your wallpaper directory, you can also remove `--iterative` and provide the path for a single wallpaper.
 picom --config /home/ash/.config/picom/picomMin.conf & 
->>>>>>> Stashed changes
 eww open example
 bspc desktop -f '^1'
 kitty &

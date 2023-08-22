@@ -21,10 +21,15 @@ bspc rule -a Kupfer.py focus=on
 bspc rule -a Screenkey manage=off
 
 /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1 &
-feh --bg-fill /home/ash/privateFiles/wallpapers/misc/windows-error.jpg
+#feh --bg-fill /home/ash/privateFiles/wallpapers/misc/windows-error.jpg
 # picom &
 # polybar &
+<<<<<<< Updated upstream
 picom --config /home/ash/.config/picom/picomMin2.conf &
+=======
+wal --iterative -i /home/ash/Images #insert your wallpaper directory, you can also remove `--iterative` and provide the path for a single wallpaper.
+picom --config /home/ash/.config/picom/picomMin.conf & 
+>>>>>>> Stashed changes
 eww open example
 bspc desktop -f '^1'
 kitty &
